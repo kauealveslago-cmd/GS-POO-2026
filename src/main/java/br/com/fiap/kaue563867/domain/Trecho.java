@@ -27,5 +27,8 @@ public class Trecho {
     private String tipoCalcada;
 
     @Column(name = "altitude", nullable = false)
-    private double altitude;
+    private Integer altitude;
+
+    @Column(name = "bairro_id", nullable = false)
+    private Long bairroId;
 }
