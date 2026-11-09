@@ -4,7 +4,10 @@ import br.com.fiap.kaue563867.domain.Bairro;
 import br.com.fiap.kaue563867.mapper.BairroMapper;
 import br.com.fiap.kaue563867.repository.BairroRepository;
 import br.com.fiap.kaue563867.web.dto.BairroDTO;
+import br.com.fiap.kaue563867.web.dto.TrechoDTO;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class BairroService {
@@ -16,18 +19,25 @@ public class BairroService {
         this.mapper = mapper;
     }
 
-    public BairroDTO salvar(BairroDTO dto) {
+    public List<BairroDTO> listar() {
+        return repo.findAll().stream().map(bairro -> mapper.paraResposta(bairro)).toList();
+    }
+
+    public BairroDTO incluir(BairroDTO dto) {
         Bairro bairro = mapper.paraEntidade(dto);
         Bairro aux = repo.save(bairro);
         return mapper.paraResposta(aux);
     }
 
-    public BairroDTO pesquisar(Long id) {
+    public BairroDTO alterar(BairroDTO dto, Long id) {
         Bairro bairro = repo.findById(id).orElseThrow();
+        bairro.setNome(dto.nome());
+        bairro.setZona(dto.zona());
+        bairro.setPossuiPiscinao(dto.possuiPiscinao());
         return mapper.paraResposta(bairro);
     }
 
-    public BairroDTO listar() {
-        return repo.findAll().stream().map(bairro -> mapper.paraResposta(bairro)).toList();
+    public void excluir(Long id) {
+        repo.deleteById(id);
     }
 }
